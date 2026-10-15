@@ -2,7 +2,11 @@
 
 Produces:
   - a markdown table (stdout)
-  - figures/adc_staircase.png  (8-bit vs 12-bit transfer staircase)
+  - figures/adc_staircase.png, a two-panel comparison
+
+The figure deliberately gives each panel its OWN y-axis. Plotting a 0..255 code
+range and a 0..4095 code range against a shared normalised axis makes both
+curves look flat over a narrow voltage window, which hides the whole point.
 """
 import os
 
@@ -11,6 +15,7 @@ from PIL import Image, ImageDraw
 VREF = 3.3          # nominal ESP32 ADC full scale (ideal / simulator assumption)
 VREF_DOC = 3.1      # upper end of the DOCUMENTED measurable range with ADC_11db
 POT_DEG = 300.0     # mechanical rotation of a standard 10k panel pot
+WINDOW_V = 0.060    # 60 mV of pot travel shown in the figure
 
 BITS = [8, 10, 12]
 
@@ -47,61 +52,118 @@ print(f"Documented ADC_11db measurable window: 150 .. 3100 mV "
       f"(span {VREF_DOC * 1000 - 150:.0f} mV = {(VREF_DOC * 1000 - 150) / (VREF_DOC * 1000) * 100:.1f}% of the 3.1 V span)")
 print(f"Sub-150 mV dead zone as a fraction of a 12-bit scale: {150 / (VREF_DOC * 1000 / 4096):.0f} codes")
 
-# --- figure: staircase, 8-bit vs 12-bit, first 0.4 V of the range -----------
-W, H = 1000, 560
-MARGIN_L, MARGIN_R, MARGIN_T, MARGIN_B = 90, 40, 70, 70
-PLOT_W = W - MARGIN_L - MARGIN_R
+# ---------------------------------------------------------------------------
+# figure: two panels, one per resolution, each with its own code axis
+# ---------------------------------------------------------------------------
+PANELS = [8, 12]
+COLORS = {8: (198, 40, 40), 12: (20, 90, 200)}
+
+W, H = 1160, 620
+MARGIN_L, MARGIN_R, MARGIN_T, MARGIN_B = 92, 34, 130, 118
+GAP = 74
+PANEL_W = (W - MARGIN_L - MARGIN_R - GAP) / 2
 PLOT_H = H - MARGIN_T - MARGIN_B
-VMAX = 0.06  # volts shown - a narrow window so quantisation is visible
 
 img = Image.new("RGB", (W, H), "white")
 d = ImageDraw.Draw(img)
 
-
-def x_of(v):
-    return MARGIN_L + (v / VMAX) * PLOT_W
-
-
-def y_of(code, levels):
-    # normalised output, so 8-bit and 12-bit share one axis
-    return MARGIN_T + PLOT_H - (code / (levels - 1)) * PLOT_H
+# per-panel stats, computed so the captions cannot drift from the drawing
+stats = {}
+for b in PANELS:
+    step = by_bits[b]["step_v"]
+    n_codes = int(WINDOW_V / step) + 1     # codes 0 .. floor(window/step)
+    stats[b] = {"step": step, "n_codes": n_codes, "max_code": n_codes - 1}
 
 
-# axes
-d.line([(MARGIN_L, MARGIN_T), (MARGIN_L, MARGIN_T + PLOT_H)], fill="black", width=2)
-d.line([(MARGIN_L, MARGIN_T + PLOT_H), (MARGIN_L + PLOT_W, MARGIN_T + PLOT_H)], fill="black", width=2)
+def panel_box(i):
+    x0 = MARGIN_L + i * (PANEL_W + GAP)
+    return x0, MARGIN_T, x0 + PANEL_W, MARGIN_T + PLOT_H
 
-# gridlines / ticks
-for i in range(6):
-    v = VMAX * i / 5
-    x = x_of(v)
-    d.line([(x, MARGIN_T + PLOT_H), (x, MARGIN_T + PLOT_H + 6)], fill="black", width=1)
-    d.text((x - 18, MARGIN_T + PLOT_H + 12), f"{v * 1000:.0f}", fill="black")
 
-d.text((MARGIN_L + PLOT_W / 2 - 110, H - 34), "input voltage at pin (mV)", fill="black")
-d.text((MARGIN_L - 70, MARGIN_T - 30), "normalised ADC output", fill="black")
-d.text((W / 2 - 230, 20), "Quantisation staircase over a 60 mV window: 8-bit vs 12-bit", fill="black")
+def nice_ticks(max_code):
+    """Return a readable tick step for a 0..max_code axis."""
+    for t in (1, 2, 5, 10, 20, 25, 50, 100):
+        if max_code / t <= 8:
+            return t
+    return 100
 
-colors = {8: (200, 40, 40), 12: (20, 90, 200)}
-for b in (8, 12):
-    r = by_bits[b]
-    levels = r["levels"]
-    step = r["step_v"]
+
+d.text((26, 18), "Same 60 mV of potentiometer travel, two ADC resolutions", fill=(17, 17, 17))
+d.text((26, 40), "Each panel has its own code axis, so the step size is directly visible.",
+       fill=(110, 110, 110))
+
+for i, b in enumerate(PANELS):
+    x0, y0, x1, y1 = panel_box(i)
+    step = stats[b]["step"]
+    max_code = stats[b]["max_code"]
+    color = COLORS[b]
+
+    def X(v):
+        return x0 + (v / WINDOW_V) * (x1 - x0)
+
+    def Y(code):
+        return y1 - (code / max_code) * (y1 - y0)
+
+    # plot frame
+    d.rectangle([x0, y0, x1, y1], outline=(205, 205, 205))
+    d.line([(x0, y0), (x0, y1)], fill="black", width=2)
+    d.line([(x0, y1), (x1, y1)], fill="black", width=2)
+
+    # horizontal gridlines at each code level (8-bit) or every tick (12-bit)
+    tick = nice_ticks(max_code)
+    level = 0
+    while level <= max_code:
+        yy = Y(level)
+        if level in (0, max_code) or level % tick == 0:
+            d.line([(x0, yy), (x0 - 7, yy)], fill="black", width=1)
+            d.text((x0 - 34, yy - 7), str(level), fill=(60, 60, 60))
+            d.line([(x0, yy), (x1, yy)], fill=(238, 238, 238))
+        level += 1
+
+    # x ticks in mV
+    for k in range(5):
+        v = WINDOW_V * k / 4
+        xx = X(v)
+        d.line([(xx, y1), (xx, y1 + 6)], fill="black", width=1)
+        label = f"{v * 1000:.0f}"
+        d.text((xx - 12, y1 + 12), label, fill=(60, 60, 60))
+    d.text(((x0 + x1) / 2 - 78, y1 + 38), "input voltage at pin (mV)", fill=(60, 60, 60))
+
+    # ideal (infinite resolution) ramp, for reference
+    d.line([(X(0), Y(0)), (X(WINDOW_V), Y(WINDOW_V / step))], fill=(185, 185, 185), width=2)
+
+    # the quantised staircase the ADC actually produces
     pts = []
-    n_steps = int(VMAX / step) + 1
-    for k in range(n_steps):
-        v0 = k * step
-        v1 = min((k + 1) * step, VMAX)
-        pts.append((x_of(v0), y_of(k, levels)))
-        pts.append((x_of(v1), y_of(k, levels)))
-    d.line(pts, fill=colors[b], width=2)
+    for code in range(0, max_code + 2):
+        v0 = code * step
+        v1 = min((code + 1) * step, WINDOW_V)
+        if v0 > WINDOW_V:
+            break
+        pts.append((X(v0), Y(code)))
+        pts.append((X(v1), Y(code)))
+    d.line(pts, fill=color, width=3)
 
-# legend
-for i, b in enumerate((8, 12)):
-    yy = MARGIN_T + 16 + i * 22
-    d.line([(MARGIN_L + PLOT_W - 210, yy), (MARGIN_L + PLOT_W - 170, yy)], fill=colors[b], width=3)
-    d.text((MARGIN_L + PLOT_W - 160, yy - 6), f"{b}-bit  ({by_bits[b]['levels']} levels)", fill="black")
+    # captions (right-aligned inside the panel so long text cannot overflow)
+    d.text((x0, y0 - 60), f"{b}-bit ADC", fill=color)
+    d.text((x0, y0 - 40), f"code range 0 .. {2 ** b - 1}", fill=(90, 90, 90))
+    d.text((x0, y0 - 22), f"step = {step * 1000:.3f} mV", fill=(90, 90, 90))
+
+    line1 = f"{stats[b]['n_codes']} possible values"
+    line2 = "in this 60 mV window"
+    d.text((x1 - d.textlength(line1), y0 - 60), line1, fill=color)
+    d.text((x1 - d.textlength(line2), y0 - 40), line2, fill=(90, 90, 90))
+
+# shared footnote
+d.text((26, H - 24),
+       "Grey line = the ideal, infinite-resolution transfer. The coloured staircase is what the converter can actually report.",
+       fill=(110, 110, 110))
 
 os.makedirs("pre-study/figures", exist_ok=True)
-img.save(os.path.join("pre-study", "figures", "adc_staircase.png"))
-print("\nwrote pre-study/figures/adc_staircase.png")
+out = os.path.join("pre-study", "figures", "adc_staircase.png")
+img.save(out)
+print()
+print("figure panels:")
+for b in PANELS:
+    print(f"  {b}-bit: {stats[b]['n_codes']} distinct codes over {WINDOW_V * 1000:.0f} mV "
+          f"(codes 0..{stats[b]['max_code']}), step {stats[b]['step'] * 1000:.3f} mV")
+print(f"\nwrote {out}")

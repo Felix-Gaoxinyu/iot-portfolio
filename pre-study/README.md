@@ -184,11 +184,15 @@ discrete steps. These figures are arithmetic on `full-scale ÷ 2ⁿ`:
 | 10-bit | 0 .. 1023 | **1024** | 3.223 mV | 3.027 mV | 0.293° |
 | 12-bit | 0 .. 4095 | **4096** | 0.806 mV | 0.757 mV | 0.073° |
 
-![Quantisation staircase over a 60 mV window, 8-bit versus 12-bit](figures/adc_staircase.png)
+![Two panels comparing an 8-bit and a 12-bit ADC over the same 60 mV window](figures/adc_staircase.png)
 
-*The same 60 mV of pot rotation seen by an 8-bit and a 12-bit converter. The 8-bit output can
-only take five values in this window; the 12-bit output manages about seventy-five. That picture
-is basically the whole idea of resolution.*
+*The same 60 mV of pot rotation, seen by both converters. I gave each panel its own code axis
+on purpose: plotted against a shared normalised axis both curves rise by under 2 % of the plot
+height and look perfectly flat, which hides the entire point. Side by side with their own axes,
+the 8-bit output can only take 5 values across this window (12.891 mV steps) while the 12-bit
+output takes 75 (0.806 mV steps). The grey line is the ideal transfer, so the gap between it and
+the coloured staircase is the quantisation error. This picture is basically the whole idea of
+resolution.*
 
 **(b) The code range really does change with the resolution setting.**
 
