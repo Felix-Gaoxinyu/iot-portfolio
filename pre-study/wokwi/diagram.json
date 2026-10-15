@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "author": "Sensors and Actuators - Module 0 pre-study",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "board-esp32-devkit-c-v4", "id": "esp", "top": 0, "left": 0, "attrs": {} },
+    { "type": "wokwi-potentiometer", "id": "pot1", "top": -120, "left": 240, "attrs": { "value": "960" } },
+    { "type": "wokwi-led", "id": "led1", "top": 30, "left": 250, "attrs": { "color": "red" } },
+    { "type": "wokwi-resistor", "id": "r1", "top": 110, "left": 250, "attrs": { "resistance": "220" } }
+  ],
+  "connections": [
+    [ "esp:3V3", "pot1:VCC", "red", [ "v0" ] ],
+    [ "esp:GND.1", "pot1:GND", "black", [ "v0" ] ],
+    [ "esp:34", "pot1:SIG", "green", [ "v0" ] ],
+    [ "esp:25", "r1:1", "blue", [ "v0" ] ],
+    [ "r1:2", "led1:A", "blue", [ "v0" ] ],
+    [ "led1:C", "esp:GND.2", "black", [ "v0" ] ],
+    [ "esp:TX", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX", "$serialMonitor:TX", "", [] ]
+  ],
+  "dependencies": {}
+}

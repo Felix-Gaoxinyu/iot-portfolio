@@ -1,0 +1,7 @@
+# Extracted full text of the course Pre-Study Guide PDF.
+# Not my own work, so it does not belong in a public repo.
+tools/guide.txt
+
+# Capture scratch / diagnostics
+.scratch/
+*.log

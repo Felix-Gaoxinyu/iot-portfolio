@@ -1,0 +1,47 @@
+[
+  {
+    "name": "12bit-pot160",
+    "bits": 12,
+    "coarse": false,
+    "pot": 160,
+    "running": true,
+    "lines": 13,
+    "last": "raw= 640/4095   681 mV  duty= 39   15.3%"
+  },
+  {
+    "name": "12bit-pot960",
+    "bits": 12,
+    "coarse": false,
+    "pot": 960,
+    "running": true,
+    "lines": 15,
+    "last": "raw=3843/4095  3067 mV  duty=239   93.7%"
+  },
+  {
+    "name": "10bit-pot960",
+    "bits": 10,
+    "coarse": false,
+    "pot": 960,
+    "running": true,
+    "lines": 14,
+    "last": "raw= 960/1023  3066 mV  duty=239   93.7%"
+  },
+  {
+    "name": "8bit-pot960",
+    "bits": 8,
+    "coarse": false,
+    "pot": 960,
+    "running": true,
+    "lines": 11,
+    "last": "raw= 240/ 255  3066 mV  duty=240   94.1%"
+  },
+  {
+    "name": "12bit-coarse-pot960",
+    "bits": 12,
+    "coarse": true,
+    "pot": 960,
+    "running": true,
+    "lines": 39,
+    "last": "raw=3843/4095  3067 mV  duty=255  100.0%"
+  }
+]

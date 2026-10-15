@@ -1,0 +1,83 @@
+SAVE
+SHARE
+Docs
+SIGN IN
+SIGN UP
+sketch.ino
+diagram.json
+Library Manager
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+{
+  "version": 1,
+  "author": "Sensors and Actuators - Module 0 pre-study",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "board-esp32-devkit-c-v4", "id": "esp", "top": 0, "left": 0, "attrs": {} },
+    { "type": "wokwi-potentiometer", "id": "pot1", "top": -120, "left": 240, "attrs": { "value": "960" } },
+    { "type": "wokwi-led", "id": "led1", "top": 30, "left": 250, "attrs": { "color": "red" } },
+    { "type": "wokwi-resistor", "id": "r1", "top": 110, "left": 250, "attrs": { "resistance": "220" } }
+  ],
+  "connections": [
+    [ "esp:3V3", "pot1:VCC", "red", [ "v0" ] ],
+    [ "esp:GND.1", "pot1:GND", "black", [ "v0" ] ],
+    [ "esp:34", "pot1:SIG", "green", [ "v0" ] ],
+    [ "esp:25", "r1:1", "blue", [ "v0" ] ],
+    [ "r1:2", "led1:A", "blue", [ "v0" ] ],
+    [ "led1:C", "esp:GND.2", "black", [ "v0" ] ],
+    [ "esp:TX", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX", "$serialMonitor:TX", "", [] ]
+  ],
+  "dependencies": {}
+}
+Simulation
+00:04.666
+25%
+ets Jul 29 2019 12:21:46
+
+rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0030,len:1156
+load:0x40078000,len:11456
+ho 0 tail 12 room 4
+load:0x40080400,len:2972
+entry 0x400805dc
+
+=== Sensors and Actuators - Module 0 pre-study ===
+ADC resolution 8 bit -> codes 0..255 (256 discrete steps)
+Potentiometer on GPIO34, LED on GPIO25
+-----------------------------------------------
+raw= 240/ 255  3066 mV  duty=240   94.1%
+raw= 240/ 255  3066 mV  duty=240   94.1%
+raw= 240/ 255  3066 mV  duty=240   94.1%
+raw= 240/ 255  3066 mV  duty=240   94.1%
+raw= 240/ 255  3066 mV  duty=240   94.1%
+raw= 240/ 255  3066 mV  duty=240   94.1%
+raw= 240/ 255  3066 mV  duty=240   94.1%
+raw= 240/ 255  3066 mV  duty=240   94.1%
+raw= 240/ 255  3066 mV  duty=240   94.1%
+raw= 240/ 255  3066 mV  duty=240   94.1%
+raw= 240/ 255  3066 mV  duty=240   94.1%

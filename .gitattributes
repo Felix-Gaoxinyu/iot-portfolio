@@ -1,0 +1,6 @@
+# Keep text files as LF in the repository; this keeps the diffs readable and
+# matches what the tooling and the Wokwi editor expect.
+* text=auto eol=lf
+
+# Binary evidence must never be converted.
+*.png binary
