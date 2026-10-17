@@ -1,33 +1,40 @@
-# Sensors and Actuators (Sensorik und Aktorik), HSBI
+# Personal Portfolio, Sensors and Actuators (Sensorik und Aktorik)
 
-Personal course portfolio, 2026.
+HSBI, WS 2026/27. Instructor: Ulrich Norbisrath (Ulno).
 
-**Module 0 pre-study entry: [`pre-study/README.md`](pre-study/README.md)**
+**Author:** Xinyu Gao
 
-That is the assessed document. It covers the signal chain, the Wokwi mini-exercise, the VL53L0X
-and MPR121 datasheet analysis, measurement and uncertainty, the actuators primer, my project
-idea, and answers to the eight Guiding Questions from the Pre-Study Guide.
+My partner is **«to fill in»**, [portfolio link](https://github.com/«partner»/iot-portfolio).
 
-## What is in here
+In my team for the final project, I also had the following members:
 
-| Path | What it is |
-|---|---|
-| [`pre-study/README.md`](pre-study/README.md) | the pre-study portfolio itself, start here |
-| [`pre-study/wokwi/`](pre-study/wokwi/) | the Wokwi project: `sketch.ino`, `diagram.json`, and five captured runs with their raw Serial Monitor logs |
-| [`pre-study/figures/`](pre-study/figures/) | the quantisation figure used in the portfolio |
-| `tools/` | the small scripts that generated the derived figures and captured the simulation evidence |
+- **«to fill in»**, [portfolio link](https://github.com/«partner»/iot-portfolio)
+- **«to fill in»**, [portfolio link](https://github.com/«partner»/iot-portfolio)
 
-## Reproducing the Wokwi run
+Our team final project repository is [«to fill in»](https://github.com/«somewhere»/final-iot-project).
 
-The exercise runs on [Wokwi](https://wokwi.com/). Open a new ESP32 project, paste the contents of
-[`pre-study/wokwi/sketch.ino`](pre-study/wokwi/sketch.ino) and
-[`pre-study/wokwi/diagram.json`](pre-study/wokwi/diagram.json), then press *Start the
-simulation*. Change `ADC_BITS` between 8, 10 and 12 to reproduce the step-count comparison.
+My personal profile and expectations, you can find [here](Module01/README.md#task-personal-profile).
 
-## Notes
+## Table of Contents
 
-The course materials are in English, so this portfolio is written in English. Per the course
-policy I am allowed to use German, English or a mixture; I have kept it in English and in my own
-words throughout.
+- [Module 0: Pre-Study](pre-study/README.md) — portfolio setup, Wokwi mini-exercise, VL53L0X and
+  MPR121 datasheet reading, measurement and uncertainty, actuators primer, project abstract, and
+  answers to the eight Guiding Questions.
+- [Module 1: IoT Introduction](Module01/README.md),
+  [Reflection 1](Reflections/ref01.md)
+- [Module 2: Hardware and Basic Electronics](Module02/README.md),
+  [Reflection 2](Reflections/ref02.md), [Reflection 3](Reflections/ref03.md)
+- ...
 
-No special hardware was needed for the pre-study: everything was done on a laptop with a browser.
+## Miscellaneous
+
+- [Hardware in my/our possession](Hardware/README.md)
+
+## Conventions I keep in this repository
+
+Per the course template: documentation is markdown only, the only binaries checked in are images
+and small GIFs, and any real code lives in its own repository and is linked from here. No PDFs,
+office documents or archives.
+
+The pre-study entry is written in English, which the course explicitly allows; German, English and
+mixed submissions are all accepted.
