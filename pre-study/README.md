@@ -1287,11 +1287,14 @@ and 2.6, rather than left implicit.
 
 ## Ready for Day 1? Checklist
 
-- [ ] I have created my personal GitHub portfolio from `iot-portfolio-template`.
-- [ ] I have committed my pre-study notes.
-- [ ] I have committed my answers to the 8 Guiding Questions.
-- [ ] I have committed my Wokwi screenshots (circuit and serial output).
-- [ ] I have committed my project abstract.
+Portfolio published at **<https://github.com/Felix-Gaoxinyu/iot-portfolio>**, public, so it can be
+read without signing in.
+
+- [x] I have created my personal GitHub portfolio.
+- [x] I have committed my pre-study notes.
+- [x] I have committed my answers to the 8 Guiding Questions.
+- [x] I have committed my Wokwi screenshots and the raw serial logs behind them.
+- [x] I have committed my project abstract.
 - [ ] My laptop is ready with Arduino IDE v2 or PlatformIO installed.
 - [ ] *(optional)* A Wokwi account and `i2c-tools` are available.
 - [ ] I am ready to receive the sensor/actuator kit and to work with the course's local
